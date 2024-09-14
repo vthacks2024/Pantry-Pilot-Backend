@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import os
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
+from recipe import execute_recipe_search
 
 # Load environment variables from .env
 load_dotenv()
@@ -41,11 +42,17 @@ def upload_image():
         # Secure the filename and save it
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        execute_recipe_search()
         return jsonify({"message": f"File uploaded successfully: {filename}"}), 200
     
     return jsonify({"error": "File type not allowed"}), 400
 
 
+
+# Home route
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 # Example API route
 @app.route('/api/hello', methods=['GET'])

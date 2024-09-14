@@ -13,12 +13,15 @@ load_dotenv()
 # Get the API key from the .env file
 api_key = os.getenv("SPOONACULAR_API_KEY")
 
-# Define the ingredients and the Spoonacular API URL
-ingredients = cv_model_call()
-print(ingredients)
-url = f"https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=5&apiKey={api_key}"
 
-def execute_recipe_search(ingredients: List[str]) -> None:
+def execute_recipe_search() -> None:
+
+    ingredients = cv_model_call()
+    print(ingredients)
+
+    # Define the Spoonacular API URL
+    url = f"https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=5&apiKey={api_key}"
+
     # Make the request
     response = requests.get(url)
     recipe = random.choice(response.json())
@@ -58,4 +61,3 @@ def execute_recipe_search(ingredients: List[str]) -> None:
     # Call the function in llm_call.py to generate a recipe with substitutions
     generate_recipe_with_substitutions(recipe['title'], prompt)
 
-execute_recipe_search(ingredients)
