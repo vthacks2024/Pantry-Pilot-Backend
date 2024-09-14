@@ -1,48 +1,21 @@
 import requests
-import os
 
-# Set up the endpoint and API key
-subscription_key = "70634a8b4c274b3987fbfdcaccd871bc"  # Replace with your actual subscription key
-endpoint = "https://vthax2024.cognitiveservices.azure.com//"  # Replace with your actual endpoint URL
-training_url = endpoint + "/vision/v3.2/analyze"
-
-# Path to the imager"C:\Users\gabeg\Documents\GabrielCollege\fridge2.jpg"
-image_path = r"C:\Users\gabeg\Documents\GabrielCollege\fridge2.jpg"  # Update path if necessary
-
-
-    # Open the image file
-with open(image_path, "rb") as image_file:
-    image_data = image_file.read()
-
-# Define headers and parameters
+# Set up the endpoint and headers
+url = "https://vthaxpredictionmodel2.cognitiveservices.azure.com/customvision/v3.0/Prediction/c72b30d5-6946-45de-ad62-0a961cf38006/detect/iterations/Iteration2/image"
 headers = {
-    'Ocp-Apim-Subscription-Key': subscription_key,
-    'Content-Type': 'application/octet-stream'
-}
-params = {
-    'visualFeatures': 'Objects,Categories,Tags'
+    "Prediction-Key": "e8c3802bc6a94f83a4299b0b531b99ef",
+    "Content-Type": "application/octet-stream"
 }
 
-# Make the request
-response = requests.post(training_url, headers=headers, params=params, data=image_data)
-response.raise_for_status()  # This will raise an exception for HTTP errors
+# Open the image file and read the content
+image_path = r"C:\Users\gabeg\Documents\GabrielCollege\jaiFridge.jpg"  # Replace with your actual image file path
+with open(image_path, "rb") as image_data:
+    # Make the request with image file as the body
+    response = requests.post(url, headers=headers, data=image_data)
 
-# Parse and print the results
-analysis = response.json()
-
-print("Detected objects:")
-for obj in analysis.get("objects", []):
-    print(f" - {obj['object']} with confidence {obj['confidence']:.2f}")
-
-print("Detected tags:")
-for tag in analysis.get("tags", []):
-    print(f" - {tag['name']} with confidence {tag['confidence']:.2f}")
-
-
-
-
-
-
-
-##tag = trainer.create_tag(project_id, tag_name)
-## 
+# Check the response
+if response.status_code == 200:
+    predictions = response.json()
+    print(predictions)
+else:
+    print(f"Error: {response.status_code}, {response.text}")
