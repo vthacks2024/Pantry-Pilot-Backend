@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 import requests
+from typing import List
 
 # Load environment variables from .env file
 load_dotenv()
@@ -14,24 +15,30 @@ headers = {
     "Content-Type": "application/octet-stream"
 }
 
-# Open the image file and read the content
-image_path = "uploads/fridge.jpg"
-with open(image_path, "rb") as image_data:
-    # Make the request with image file as the body
-    response = requests.post(url, headers=headers, data=image_data)
+def cv_model_call()-> List[str]:
+    # Open the image file and read the content
+    image_path = "uploads/fridge.jpg"
+    with open(image_path, "rb") as image_data:
+        # Make the request with image file as the body
+        response = requests.post(url, headers=headers, data=image_data)
 
-# Check the response
-if response.status_code == 200:
-    # Parse JSON response
-    predictions = response.json()
+    # Check the response
+    if response.status_code == 200:
+        # Parse JSON response
+        predictions = response.json()
 
-    # Print detected ingredients in a structured format
-    print("Detected Ingredients:\n")
-    for prediction in predictions['predictions']:
-        tag_name = prediction['tagName']
-        probability = prediction['probability']
-        # Print out predictions with a meaningful probability (e.g., > 0.1)
-        if probability > 0.1:
-            print(f"Ingredient: {tag_name}, Confidence: {probability:.2%}")
-else:
-    print(f"Error: {response.status_code}, {response.text}")
+        detected_ingredients = []
+        # Print detected ingredients in a structured format
+        print("Detected Ingredients:\n")
+        for prediction in predictions['predictions']:
+            tag_name = prediction['tagName']
+            probability = prediction['probability']
+            # Print out predictions with a meaningful probability (e.g., > 0.1)
+            if "[Auto-Generated]" not in tag_name and probability > 0.1:
+                print(f"Ingredient: {tag_name}, Confidence: {probability:.2%}")
+                detected_ingredients.append(tag_name)
+            
+        return detected_ingredients
+    else:
+        print(f"Error: {response.status_code}, {response.text}")
+        
