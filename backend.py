@@ -47,11 +47,6 @@ def upload_image():
 
 
 
-# Home route
-@app.route('/')
-def index():
-    return render_template('index.html')
-
 # Example API route
 @app.route('/api/hello', methods=['GET'])
 def hello_api():
