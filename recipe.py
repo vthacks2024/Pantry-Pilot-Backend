@@ -62,7 +62,7 @@ def execute_recipe_search(dietary_restrictions: List[str]):
     f"Please reformat the recipe in a user-friendly way, considering the following dietary restrictions: {', '.join(dietary_restrictions)}. "
     f"Focus on providing healthy substitutions for both the missing and used ingredients. "
     f"Ensure that the substitutions adhere to the dietary restrictions where applicable. "
-    f"Organize the recipe with clear headings for ingredients and instructions. Provide suggestions for healthier alternatives where necessary, "
+    f"Organize the recipe with clear headings for ingredients and instructions. Provide a brief introduction to the recipe. Provide suggestions for healthier alternatives where necessary, "
     f"and explain why each substitution is a healthier option."
 )
 
