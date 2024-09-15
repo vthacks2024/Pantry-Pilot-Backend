@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+import glob 
 import requests
 from typing import List
 
@@ -15,9 +16,24 @@ headers = {
     "Content-Type": "application/octet-stream"
 }
 
+def get_most_recent_image(directory: str) -> str:
+    # Use glob to find all files in the directory
+    list_of_files = glob.glob(f"{directory}/*")
+    
+    if not list_of_files:
+        raise FileNotFoundError(f"No files found in the directory: {directory}")
+    
+    # Get the most recent file based on modification time
+    latest_file = max(list_of_files, key=os.path.getmtime)
+    
+    return latest_file
+
+
+
 def cv_model_call()-> List[str]:
     # Open the image file and read the content
-    image_path = "uploads/fridge.jpg"
+    image_path = get_most_recent_image('uploads')
+    print(image_path)
     with open(image_path, "rb") as image_data:
         # Make the request with image file as the body
         response = requests.post(url, headers=headers, data=image_data)
