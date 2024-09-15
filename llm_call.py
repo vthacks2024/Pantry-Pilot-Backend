@@ -23,7 +23,7 @@ model_name = "gpt-35-turbo"
 deployment_name='vthacks1'
 
 # Function to generate a recipe with substitutions
-def generate_recipe_with_substitutions(recipe_title, prompt):
+def generate_recipe_with_substitutions(recipe_title, prompt)-> str:
     # Send the prompt to the OpenAI GPT-3.5 Turbo model
     completion = client.completions.create(
         model=deployment_name,
@@ -32,10 +32,12 @@ def generate_recipe_with_substitutions(recipe_title, prompt):
         temperature=0.5 
     )
 
-    # Print the recipe response from the OpenAI model
-    print(f"Recipe: {recipe_title}")
-    print(f"Prompt: {prompt}")
-    print("Generated Recipe and Substitutions:")
-    print(completion.choices[0].text.strip())
-    print("\n---\n")
+    # Extract the generated text from the completion
+    generated_text = completion.choices[0].text.strip()
+
+    # Format the result as a string
+    result = f"Recipe: {recipe_title}\nPrompt: {prompt}\nGenerated Recipe and Substitutions:\n{generated_text}\n---\n"
+
+    # Return the formatted string
+    return result
 

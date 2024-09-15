@@ -42,8 +42,8 @@ def upload_image():
         # Secure the filename and save it
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        execute_recipe_search()
-        return jsonify({"message": f"File uploaded successfully: {filename}"}), 200
+        result = execute_recipe_search()
+        return result, 200
     
     return jsonify({"error": "File type not allowed"}), 400
 
