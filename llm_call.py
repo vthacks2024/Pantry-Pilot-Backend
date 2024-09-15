@@ -28,7 +28,7 @@ def generate_recipe_with_substitutions(recipe_title, prompt)-> str:
     completion = client.completions.create(
         model=deployment_name,
         prompt=prompt,
-        max_tokens=300,  # Limiting the response length
+        max_tokens=500,  # Limiting the response length
         temperature=0.5 
     )
 
