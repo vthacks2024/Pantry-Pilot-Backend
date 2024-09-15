@@ -36,7 +36,7 @@ def generate_recipe_with_substitutions(recipe_title, prompt)-> str:
     generated_text = completion.choices[0].text.strip()
 
     # Format the result as a string
-    result = f"Recipe: {recipe_title}\nPrompt: {prompt}\nGenerated Recipe and Substitutions:\n{generated_text}\n---\n"
+    result = f"Recipe: {recipe_title}\n{generated_text}\n---\n"
 
     # Return the formatted string
     return result
