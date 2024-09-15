@@ -30,21 +30,35 @@ def upload_image():
     # Check if the post request has the file part
     if 'file' not in request.files:
         return jsonify({"error": "No file part"}), 400
-    
+
     file = request.files['file']
-    
+
     # If no file is selected
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
-    
+
     # Check if the file is allowed
     if file and allowed_file(file.filename):
         # Secure the filename and save it
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        result = execute_recipe_search()
-        return result, 200
-    
+        
+        # Get dietary restrictions from the request form (as a comma-separated string)
+        dietary_restrictions_str = request.form.get('dietary_restrictions', '')  # Default to empty string if not provided
+        
+        # Split the dietary restrictions into a list
+        dietary_restrictions = [item.strip() for item in dietary_restrictions_str.split(',') if item.strip()]
+
+        # Pass the dietary restrictions to the function that processes the recipe
+        result, image_url = execute_recipe_search(dietary_restrictions)
+
+        # Return the result as a string
+        return jsonify({
+            "message": f"File uploaded successfully: {filename}",
+            "result": result,
+            "image_url": image_url
+        }), 200
+
     return jsonify({"error": "File type not allowed"}), 400
 
 
