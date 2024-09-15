@@ -14,7 +14,7 @@ load_dotenv()
 api_key = os.getenv("SPOONACULAR_API_KEY")
 
 
-def execute_recipe_search() -> None:
+def execute_recipe_search() -> str:
 
     ingredients = cv_model_call()
     print(ingredients)
@@ -59,5 +59,6 @@ def execute_recipe_search() -> None:
     )
 
     # Call the function in llm_call.py to generate a recipe with substitutions
-    generate_recipe_with_substitutions(recipe['title'], prompt)
+    result = generate_recipe_with_substitutions(recipe['title'], prompt)
+    return result
 
